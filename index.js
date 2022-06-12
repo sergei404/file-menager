@@ -1,5 +1,7 @@
 import * as readline from "node:readline";
-import {cmdExac} from'./cmd.js';
+import {up} from'./up.js';
+import {list} from'./list.js';
+import {cd} from'./cd.js';
 import {objOs} from'./os.js';
 import {compressOrDecompress} from'./compress.js';
 import {calculateHash} from'./hash.js';
@@ -24,6 +26,15 @@ function question() {
       case (command === ".exit"):
         console.log(`Thank you for using File Manager, ${userName}!`);
         process.exit();
+      case (command === "up"):
+        up()
+        break
+      case (command.includes("cd ")):
+        cd(command)
+        break
+      case (command === "ls"):
+        list()
+        break
       case (command.includes("os --")):
         const commandOs = command.split(' ')[1];
         console.log(objOs[commandOs]);
