@@ -1,0 +1,77 @@
+import * as readline from "node:readline";
+import {cmdExac} from'./cmd.js';
+import {objOs} from'./os.js';
+import {compressOrDecompress} from'./compress.js';
+import {calculateHash} from'./hash.js';
+import {read} from'./read.js';
+import {create} from'./create.js';
+import {rename} from'./rename.js';
+import {copy} from'./copy.js';
+import {move} from'./move.js';
+import {remove} from'./remove.js';
+
+
+const rl = readline.createInterface(process.stdin, process.stdout);
+
+const userName = process.argv.slice(2)[0].split("=")[1];
+
+console.log(`Welcome to the File Manager, ${userName}!`);
+
+function question() {
+  try {
+    rl.question("Enter command ", (command) => {
+    switch (true) {
+      case (command === ".exit"):
+        console.log(`Thank you for using File Manager, ${userName}!`);
+        process.exit();
+      case (command.includes("os --")):
+        const commandOs = command.split(' ')[1];
+        console.log(objOs[commandOs]);
+        break;
+      case ((command.includes("compress ") || command.includes("decompress ")) && command.split(' ').length === 3):
+        compressOrDecompress(command)
+        break;
+      case (command.includes("hash ")):
+        calculateHash(command)
+        break;
+      case (command.includes("cat ")):
+        read(command)
+        break;
+      case (command.includes("add ")):
+        create(command)
+        break;
+      case (command.includes("rn ")):
+        rename(command)
+        break;
+      case (command.includes("cp ")):
+        copy(command)
+        break;
+      case (command.includes("mv ")):
+        move(command)
+        break;
+      case (command.includes("rm ")):
+        remove(command)
+        break;
+      default:
+        console.log('Invalid input');
+        break;
+    }
+    console.log('You are currently in path_to_working_directory')
+    question();
+  });
+  } catch (error) {
+    console.log('Operation failed');
+    question();
+  }
+  
+}
+
+question();
+
+process.stdin.setRawMode(true);
+process.stdin.on("keypress", (chunk, key) => {
+  if (key && key.name === "c" && key.ctrl) {
+    console.log(`\nThank you for using File Manager, ${userName}!`);
+    process.exit();
+  }
+});
