@@ -56,7 +56,7 @@ function question() {
         console.log('Invalid input');
         break;
     }
-    console.log('You are currently in path_to_working_directory')
+    console.log(`You are currently in ${process.cwd()}`)
     question();
   });
   } catch (error) {
